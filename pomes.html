@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Nav + Loader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Glass Navbar</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
     <style>
         * {
@@ -15,44 +15,14 @@
         }
 
         body {
-            background: #000;
-            height: 200vh;
+            background: #d9d5c7;
             color: #fff;
-            overflow-x: hidden;
+            min-height: 200vh;
+            /* keep scroll */
+            margin-left: 30px;
         }
 
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: #fff;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity .8s ease, visibility .8s ease;
-        }
-
-        .loading-line {
-            height: 4px;
-            width: 0;
-            background: #000;
-            animation: expandLine 1s ease forwards;
-        }
-
-        @keyframes expandLine {
-            to {
-                width: 200px;
-            }
-        }
-
-        #main-content {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
+        /* Navbar styles (keep your existing styles plus this transition) */
         nav {
             position: fixed;
             top: 0;
@@ -65,13 +35,14 @@
             align-items: center;
             border-radius: 100px;
             z-index: 1000;
-            transition: top .4s ease, border-radius .4s ease;
             background: rgba(126, 126, 126, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
             flex-wrap: wrap;
+            transition: top 0.4s ease;
         }
+
 
         .hamburger {
             display: none;
@@ -89,7 +60,7 @@
             width: 100%;
             border-radius: 2px;
             left: 0;
-            transition: all .4s ease;
+            transition: all 0.4s ease;
         }
 
         .hamburger span:nth-child(1) {
@@ -122,7 +93,7 @@
             display: flex;
             list-style: none;
             gap: 25px;
-            transition: max-height .4s ease, opacity .4s ease;
+            transition: max-height 0.4s ease, opacity 0.4s ease;
         }
 
         nav ul li a {
@@ -131,12 +102,7 @@
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 1px;
-            font-size: .9rem;
-        }
-
-        .logo h2 {
-            color: #fff;
-            font-weight: bold;
+            font-size: 0.9rem;
         }
 
         .btn {
@@ -149,12 +115,59 @@
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: background-color .3s ease;
+            transition: background-color 0.3s ease;
         }
 
         .btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+
+
+        /* Poems container */
+        #poems {
+            max-width: 350px;
+            margin-top: calc(150px + 50px);
+            color: #fff;
+            line-height: 2;
+            user-select: text;
+            font-size: 1.2rem;
+        }
+
+        /* Each poem styling */
+        .poem {
+            margin-bottom: 2rem;
+            /* No background */
+        }
+
+        .poem h1 {
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .poem p {
+            white-space: pre-wrap;
+            font-weight: 400;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            #poems {
+                max-width: 100%;
+                margin: 160px 20px 20px 20px;
+                /* More top margin for mobile */
+                padding: 0 10px;
+            }
+
+            .poem h2 {
+                font-size: 1.8rem;
+            }
+
+            .poem p {
+                font-size: 1.1rem;
+            }
+        }
+
+
 
         @media (max-width: 768px) {
             .hamburger {
@@ -162,8 +175,7 @@
             }
 
             nav {
-                padding: 20px;
-                border-radius: 50px !important;
+                flex-wrap: nowrap;
                 justify-content: flex-start;
                 gap: 10px;
             }
@@ -173,7 +185,6 @@
                 width: 100%;
                 background: rgba(126, 126, 126, 0.1);
                 margin-top: 10px;
-                align-items: flex-start;
                 border-radius: 20px;
                 padding: 10px 20px;
                 max-height: 0;
@@ -190,10 +201,6 @@
                 margin: 10px 0;
             }
 
-            .logo {
-                display: none;
-            }
-
             .btn {
                 width: 100%;
             }
@@ -202,48 +209,99 @@
 </head>
 
 <body>
-    <div id="loader">
-        <div class="loading-line"></div>
-    </div>
+    <nav id="navbar">
+        <div class="hamburger" id="hamburger" aria-label="Toggle menu" tabindex="0">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="logo">
+            <h2>LOGO</h2>
+        </div>
+        <ul id="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Poems</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="login"><button class="btn">Login</button></div>
+    </nav>
 
-    <div id="main-content">
-        <nav id="navbar">
-            <div class="hamburger" id="hamburger">
-                <span></span><span></span><span></span>
-            </div>
-            <div class="logo">
-                <h2>LOGO</h2>
-            </div>
-            <ul id="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Poems</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-            <div class="login"><button class="btn">Login</button></div>
-        </nav>
-    </div>
+    <div id="poems"></div>
 
-    <script>
+
+
+
+    <script type="module">
+        // Firebase SDK imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXIqAste5fH8TNCz5zfsPR_hkhLCvbzpM",
+            authDomain: "belalpoem-5c44a.firebaseapp.com",
+            projectId: "belalpoem-5c44a",
+            storageBucket: "belalpoem-5c44a.firebasestorage.app",
+            messagingSenderId: "329344972173",
+            appId: "1:329344972173:web:a385150af33b014939b9c4"
+        };
+
+        // Init Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Load poems from Firestore
+        async function loadPoems() {
+            const poemCol = collection(db, "poems");
+            const poemSnapshot = await getDocs(poemCol);
+            const poemList = poemSnapshot.docs.map(doc => doc.data());
+
+            const container = document.getElementById("poems");
+            container.innerHTML = ""; // clear if reloading
+
+            poemList.forEach(poem => {
+                const div = document.createElement("div");
+                div.className = "poem";
+                div.innerHTML = `
+            <h2>${poem.title}</h2>
+            <p>${poem.text.replace(/\n/g, "<br>")}</p>
+        `;
+                container.appendChild(div);
+            });
+        }
+
+        // Call the function on page load
+        loadPoems();
+
+        let prevScrollPos = window.pageYOffset;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollPos = window.pageYOffset;
+
+            if (prevScrollPos > currentScrollPos) {
+                // scrolling up — show navbar
+                navbar.style.top = '20px';
+            } else {
+                // scrolling down — hide navbar
+                navbar.style.top = '-100px';
+            }
+            prevScrollPos = currentScrollPos;
+        });
+
+
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('nav-links');
         const navbar = document.getElementById('navbar');
 
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            const mainContent = document.getElementById('main-content');
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                loader.style.visibility = 'hidden';
-                mainContent.style.opacity = '1';
-            }, 1000);
-        });
-
-        hamburger.addEventListener('click', () => {
+        function toggleMenu() {
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('active');
             navbar.style.borderRadius = navLinks.classList.contains('active') ? '20px' : '100px';
-        });
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        
     </script>
 </body>
 
