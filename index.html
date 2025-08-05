@@ -1,425 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Glass Nav</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Glass Nav</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+    body {
+      background: #000;
+      height: 200vh;
+      overflow-x: hidden;
+      color: #fffcfc;
+    }
 
-        body {
-            background: #000;
-            height: 200vh;
-            overflow-x: hidden;
-            color: #fffcfc;
-        }
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: #fff;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .8s ease, visibility .8s ease;
+    }
 
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background: #fff;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity .8s ease, visibility .8s ease;
-        }
+    .loading-line {
+      height: 4px;
+      width: 0;
+      background: #000;
+      animation: expandLine 1s ease forwards;
+    }
 
-        .loading-line {
-            height: 4px;
-            width: 0;
-            background: #000;
-            animation: expandLine 1s ease forwards;
-        }
+    @keyframes expandLine {
+      to { width: 200px; }
+    }
 
-        @keyframes expandLine {
-            to {
-                width: 200px;
-            }
-        }
+    #main-content {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
 
-        #main-content {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: calc(100% - 40px);
+      margin: 20px;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 100px;
+      z-index: 1000;
+      transition: top .4s ease, border-radius .4s ease;
+      background: rgba(126, 126, 126, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      flex-wrap: wrap;
+    }
 
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: calc(100% - 40px);
-            margin: 20px;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 100px;
-            z-index: 1000;
-            transition: top .4s ease, border-radius .4s ease;
-            background: rgba(126, 126, 126, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            flex-wrap: wrap;
-        }
+    .hamburger {
+      display: none;
+      width: 30px;
+      height: 22px;
+      position: relative;
+      cursor: pointer;
+      z-index: 1100;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-        .hamburger {
-            display: none;
-            width: 30px;
-            height: 22px;
-            position: relative;
-            cursor: pointer;
-            z-index: 1100;
-            -webkit-tap-highlight-color: transparent;
-        }
+    .hamburger span {
+      background: #fff;
+      position: absolute;
+      height: 4px;
+      width: 100%;
+      border-radius: 2px;
+      left: 0;
+      transition: all .4s ease;
+    }
 
-        .hamburger span {
-            background: #fff;
-            position: absolute;
-            height: 4px;
-            width: 100%;
-            border-radius: 2px;
-            left: 0;
-            transition: all .4s ease;
-        }
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 9px; }
+    .hamburger span:nth-child(3) { top: 18px; }
 
-        .hamburger span:nth-child(1) {
-            top: 0;
-        }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg);
+      top: 9px;
+    }
 
-        .hamburger span:nth-child(2) {
-            top: 9px;
-        }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
 
-        .hamburger span:nth-child(3) {
-            top: 18px;
-        }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg);
+      top: 9px;
+    }
 
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg);
-            top: 9px;
-        }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+      transition: max-height .4s ease, opacity .4s ease;
+    }
 
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+      font-size: .9rem;
+      user-select: none;
+    }
 
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg);
-            top: 9px;
-        }
+    .btn {
+      padding: 10px 20px;
+      font-weight: bold;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 1000px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      user-select: none;
+      transition: background-color .3s ease;
+    }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 25px;
-            transition: max-height .4s ease, opacity .4s ease;
-        }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
 
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 1px;
-            font-size: .9rem;
-            user-select: none;
-        }
+    .banner {
+      height: 100vh;
+      width: 100%;
+      background: url('26524e10-4bb7-4460-8071-3daf6d4f986e.jpg') no-repeat center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      opacity: .8;
+      position: relative;
+      z-index: 0;
+    }
 
-        .btn {
-            padding: 10px 20px;
-            font-weight: bold;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 1000px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            user-select: none;
-            transition: background-color .3s ease;
-        }
+    .bl {
+      color: #fffcfc;
+      font-size: 1.8rem;
+      gap: 20px;
+      font-weight: bold;
+      margin-left: auto;
+      text-align: right;
+      padding-right: 80px;
+      max-width: 550px;
+    }
 
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+    .bl p {
+      margin-top: 10px;
+    }
 
-        .banner {
-            height: 100vh;
-            width: 100%;
-            background: url('26524e10-4bb7-4460-8071-3daf6d4f986e.jpg') no-repeat center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            opacity: .8;
-            position: relative;
-            z-index: 0;
-        }
+    .poem {
+      padding: 20px 30px;
+      font-weight: bold;
+      color: #fff;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 1000px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      user-select: none;
+      margin-top: 20px;
+      transition: background-color .3s ease;
+    }
 
-        .bl {
-            color: #fffcfc;
-            font-size: 1.8rem;
-            gap: 20px;
-            font-weight: bold;
-            margin-left: auto;
-            text-align: right;
-            padding-right: 80px;
-            max-width: 550px;
-        }
+    .poem:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
 
-        .bl p {
-            margin-top: 10px;
-        }
+    .about {
+      color: #fff;
+      background: #d9d5c7;
+      height: 1200px;
+      padding: 200px 150px 0 150px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-        .poem {
-            padding: 20px 30px;
-            font-weight: bold;
-            color: #fff;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 1000px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            user-select: none;
-            margin-top: 20px;
-            transition: background-color .3s ease;
-        }
+    .about h1 { font-size: 3rem; }
+    .about h3 { font-size: 5rem; font-weight: 500; }
+    .about p  { font-size: 3.5rem; font-weight: 500; }
 
-        .poem:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+    .about h1, .about h3, .about p {
+      opacity: 0.1;
+      transition: opacity 1.2s ease;
+    }
 
-        .about {
-            color: #fff;
-            background: #d9d5c7;
-            height: 1200px;
-            padding: 200px 150px 0 150px;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex-direction: column;
-            gap: 20px;
-        }
+    .about.fade-in h1,
+    .about.fade-in h3,
+    .about.fade-in p {
+      opacity: 1;
+    }
 
-        .about h1 {
-            font-size: 3rem;
-        }
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
 
-        .about h3 {
-            font-size: 5rem;
-            font-weight: 500;
-        }
+      nav {
+        padding: 20px;
+        border-radius: 50px !important;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 10px;
+      }
 
-        .about p {
-            font-size: 3.5rem;
-            font-weight: 500;
-        }
+      nav ul {
+        flex-direction: row;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.4s ease, opacity 0.4s ease;
+      }
 
-        .about h1,
-        .about h3,
-        .about p {
-            opacity: 0.1;
-            transition: opacity 1.2s ease;
-        }
+      nav ul.active {
+        max-height: 500px;
+        opacity: 1;
+        gap: 15px;
+      }
 
-        .about.fade-in h1,
-        .about.fade-in h3,
-        .about.fade-in p {
-            opacity: 1;
-        }
+      nav ul li {
+        margin: 10px 0;
+      }
 
-        @media (max-width:768px) {
-            .hamburger {
-                display: block;
-            }
+      .btn {
+        width: 100%;
+      }
 
-            nav {
-                padding: 20px;
-                border-radius: 50px !important;
-                flex-wrap: nowrap;
-                justify-content: flex-start;
-                gap: 10px;
-            }
+      .bl {
+        padding-right: 20px;
+      }
 
-            nav ul {
-                display: flex !important;
-                flex-direction: column;
-                width: 100%;
-                background: rgba(126, 126, 126, 0.1);
-                margin-top: 10px;
-                align-items: left;
-                border-radius: 20px;
-                padding: 10px 20px;
-                max-height: 0;
-                overflow: hidden;
-                opacity: 0;
-                transition: max-height .4s ease, opacity .4s ease;
-            }
+      .bl h1 {
+        font-size: 2.5rem;
+      }
 
-            /* Hide logo only when menu active */
-            nav ul.active~.logo h2,
-            nav ul.active+.logo h2 {
-                display: none !important;
-            }
+      .bl p {
+        font-size: 1.5rem;
+      }
 
-            /* Instead of complicated selectors, do this with JS toggle class on navbar */
+      .bl .poem {
+        padding: 20px;
+      }
 
-            /* Align menu items left when active */
-            nav ul.active {
-                justify-content: flex-start;
-                padding-left: 0;
-            }
+      .about {
+        padding: 100px 20px 50px 20px;
+        text-align: left;
+      }
 
-            nav ul.active li a {
-                text-align: left;
-            }
+      .about h1 {
+        font-size: 2rem;
+      }
 
-            nav ul.active {
-                max-height: 500px;
-                opacity: 1;
-            }
+      .about h3 {
+        font-size: 2.8rem;
+        font-weight: 500;
+      }
 
-            nav ul li {
-                margin: 10px 0;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .bl {
-                padding-right: 20px;
-            }
-
-            .bl h1 {
-                font-size: 2.5rem;
-            }
-
-            .bl p {
-                font-size: 1.5rem;
-            }
-
-            .bl .poem {
-                padding: 20px;
-            }
-
-            .about {
-                padding: 100px 20px 50px 20px;
-                text-align: left;
-            }
-
-            .about h1 {
-                font-size: 2rem;
-            }
-
-            .about h3 {
-                font-size: 2.8rem;
-                font-weight: 500;
-            }
-
-            .about p {
-                font-size: 2.5rem;
-                word-wrap: break-word;
-            }
-        }
-    </style>
+      .about p {
+        font-size: 2.5rem;
+        word-wrap: break-word;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div id="loader">
-        <div class="loading-line"></div>
+  <div id="loader">
+    <div class="loading-line"></div>
+  </div>
+  <div id="main-content">
+    <nav id="navbar">
+      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      <div class="logo"><h2>LOGO</h2></div>
+      <ul id="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="pomes.html">Poems</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <div class="login" id="loginBtn"><button class="btn">Login</button></div>
+    </nav>
+    <div class="banner">
+      <div class="bi"></div>
+      <div class="bl">
+        <h1>Belal Uddin</h1>
+        <p>Honoring Belal Uddin — A Journey Through Words, Wisdom & Soul.</p>
+        <button class="poem">View Poems</button>
+      </div>
     </div>
-    <div id="main-content">
-        <nav id="navbar">
-            <div class="hamburger" id="hamburger" aria-label="Toggle menu" tabindex="0">
-                <span></span><span></span><span></span>
-            </div>
-            <div class="logo">
-                <h2>LOGO</h2>
-            </div>
-            <ul id="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="pomes.html">Poems</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-            <div class="login"><button class="btn">Login</button></div>
-        </nav>
-        <div class="banner">
-            <div class="bi"></div>
-            <div class="bl">
-                <h1>Belal Uddin</h1>
-                <p>Honoring Belal Uddin — A Journey Through Words, Wisdom & Soul.</p>
-                <button class="poem">View Poems</button>
-            </div>
-        </div>
-    </div>
-    <div class="about">
-        <h1>About Belal</h1>
-        <h3>Poet, Writer</h3>
-        <p>Behind each of these approaches <br /> lies a very physical attempt to <br /> give voice to the wellsprings
-            of<br /> human identity, human striving <br /> and, most diffcult of all, the <br /> possibilites for human
-            <br /> happiness.
-        </p>
-    </div>
-    <!-- about done -->
+  </div>
 
+  <div class="about" id="about">
+    <h1>About Belal</h1>
+    <h3>Poet, Writer</h3>
+    <p>Behind each of these approaches <br /> lies a very physical attempt to <br /> give voice to the wellsprings
+      of<br /> human identity, human striving <br /> and, most diffcult of all, the <br /> possibilites for human
+      <br /> happiness.</p>
+  </div>
 
-    <script>
-        const aboutSection = document.querySelector('.about');
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('nav-links');
-        const navbar = document.getElementById('navbar');
+  <script>
+    const aboutSection = document.querySelector('.about');
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const navbar = document.getElementById('navbar');
+    const logo = document.querySelector('.logo h2');
+    const loginBtn = document.getElementById('loginBtn');
 
-        const fadeObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) aboutSection.classList.add('fade-in');
-                else aboutSection.classList.remove('fade-in');
-            });
-        }, { threshold: 0.5 });
-        fadeObserver.observe(aboutSection);
+    function toggleMenu() {
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('active');
+      logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
+      loginBtn.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
+      navbar.style.borderRadius = navLinks.classList.contains('active') ? '20px' : '100px';
+    }
 
-        let prevScrollPos = window.pageYOffset;
-        window.onscroll = () => {
-            const currentScrollPos = window.pageYOffset;
-            navbar.style.top = prevScrollPos > currentScrollPos ? '20px' : '-100px';
-            prevScrollPos = currentScrollPos;
-        };
+    hamburger.addEventListener('click', toggleMenu);
 
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            const mainContent = document.getElementById('main-content');
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                loader.style.visibility = 'hidden';
-                mainContent.style.opacity = '1';
-            }, 1000);
-        });
+    const fadeObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) aboutSection.classList.add('fade-in');
+        else aboutSection.classList.remove('fade-in');
+      });
+    }, { threshold: 0.5 });
 
-        function toggleMenu() {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            navbar.style.borderRadius = navLinks.classList.contains('active') ? '20px' : '100px';
-        }
-        hamburger.addEventListener('click', toggleMenu);
+    fadeObserver.observe(aboutSection);
 
-    </script>
+    let prevScrollPos = window.pageYOffset;
+    window.onscroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      navbar.style.top = prevScrollPos > currentScrollPos ? '20px' : '-100px';
+      prevScrollPos = currentScrollPos;
+    };
 
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader');
+      const mainContent = document.getElementById('main-content');
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.visibility = 'hidden';
+        mainContent.style.opacity = '1';
+      }, 1000);
+    });
+  </script>
 </body>
-
 </html>
